@@ -1,0 +1,31 @@
+---
+
+version: '3.7'
+
+volumes:
+  mysqldata:
+
+services:
+  mysql:
+    image: mysql:8.0
+    environment:
+      - MYSQL_ROOT_PASSWORD=123456
+    ports:
+      - '3306:3306'
+    volumes:
+      - 'mysqldata:/var/lib/mysql-files/'
+  backend:
+    build:
+      context: ..
+      dockerfile: docker/backend.Dockerfile
+    # entrypoint: python /modelosEScripts/preLoadInfos.py
+    ports:
+      - '8000:8000'
+    volumes:
+      - 'mysqldata:/home'
+  frontend:
+    build:
+      context: ..
+      dockerfile: docker/frontend.Dockerfile
+    ports:
+      - '3000:3000'
